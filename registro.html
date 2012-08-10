@@ -1,0 +1,212 @@
+<?php
+require_once "DB.php";
+require_once "f_genericas.inc.php";
+include_once "test_lfbypefe_des.inc.php";
+
+$registro = FALSE;
+
+if (isset($_POST[correo])) { 
+    $db = DBconnect($dsn);    
+    
+    if (!existe_registro("SELECT correo FROM USUARIO WHERE correo = '" . $_POST['correo'] . "';") ) {    
+        if (!strcmp($_POST['correo'], $_POST['correo2']) AND !empty($_POST['correo']) ) {
+          if (!strcmp($_POST['clave'], $_POST['clave2']) AND !empty($_POST['clave']) ) {
+            if (!empty($_POST['correo']) && !empty($_POST['clave']) && !empty($_POST['nombre']) && !empty($_POST['apellidos']) && !empty($_POST['estado']) && 
+              !empty($_POST['ciudad']) && !empty($_POST['tel_personal']) && !empty($_POST['empresa']) && !empty($_POST['puesto'])) {
+              
+              $SQL = "INSERT INTO USUARIO VALUES ('" . $_POST['correo'] . "', MD5('" . $_POST['clave'] . "'), '" . $_POST['nombre'] . "', ";
+              $SQL.= "'" . $_POST['apellidos'] . "', '" . $_POST['estado'] . "', '" . $_POST['ciudad'] . "', '" . $_POST['empresa'] . "', ";
+              $SQL.= "'" . $_POST['puesto'] . "', '" . $_POST['tel_personal'] . "', '" . $_POST['tel_empresa'] . "', 'N', MD5('" . $_POST['correo'] . "'));";
+              $RES = DBquery($SQL);
+              if ($db->affectedRows() == 1) {
+                  $cabecera   = "Registro para tests en línea";
+                  $mensajetot = "Para confirmar su registro, copie esta liga en su nagegador: http://www.lfbypefe.com.mx/TEST/confirmacion.php?regid=" . md5($_POST['correo']);
+                  $enviado = mail($_POST['correo'], $cabecera, $mensajetot, "From: LFBYPEFE <noresponder@lfbypefe.com.mx>\nMime-Version: 1.0\nX-Mailer: lfbypefe.com.mx\nIP: " . $_SERVER['REMOTE_ADDR']);
+                  if ($enviado) {
+                      $mensaje = "Se ha enviado un mensaje a la cuenta " . $_POST['correo'] . ",<br />siga las instrucciones para confirmar su registro.<P><P><a href=inicio.html><img src=img/regresar_home.jpg width=150 height=138 border=0></a>";
+                      $registro = TRUE;
+                  }
+              }              
+            } else { 
+                $mensaje = "ATENCI&Oacute;N: Faltan algunos datos obligatorios.";
+            }
+          } else {
+            $mensaje = "ATENCI&Oacute;N: La clave de ingreso y su confirmaci&oacute;n no coinciden.";
+          }
+        } else {
+            $mensaje = "ATENCI&Oacute;N: El correo electr&oacute;nico y su confirmaci&oacute;n no coinciden.";
+        }
+    } else {
+        $mensaje = "ATENCI&Oacute;N: El correo electr&oacute;nico ya se encuentra registrado en el sistema.";
+    }    
+}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><?php include "ENCABEZADO.html";?></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table width="785" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+          <tr>
+            <td><img src="img/pixel.gif" width="10" height="10" /></td>
+          </tr>
+          <tr>
+            <td align="center"><img src="img/tituloregistro.jpg" width="511" height="117" /></td>
+          </tr>
+          <tr>
+            <td align="center"><?php
+        if (!$registro) {
+        ?>
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="4" class="texto_verdana_12px_grisclaro">
+                  <tr>
+                    <td><p>Para ingresar al sistema de &ldquo;Test en l&iacute;nea&rdquo; se le solicitar&aacute;  un usuario y clave que nos servir&aacute;n para llevar un control estad&iacute;stico de los  resultados obtenidos.&nbsp;&nbsp;&nbsp; Su informaci&oacute;n  ser&aacute; confidencial y de uso exclusivo para Language  First by Practical Education For Executives, S. C.<br>
+                            <em>Como usuario de ingreso utilizaremos su correo electr&oacute;nico  de uso personal, cualquier informaci&oacute;n, resultados, recuperaci&oacute;n de contrase&ntilde;a  y contacto por nuestra parte ser&aacute; enviado a esa direcci&oacute;n.</em> </p></td>
+                  </tr>
+              </table></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_11px_blanco"><table border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_11px_blanco">
+                <form action="<?=$PHP_SELF?>" method="POST" name="registro">
+                  <?php
+          if (isset($_POST[correo])) {
+          ?>
+                  <tr class="texto_cajas_naranja">
+                    <td colspan="2" align="center"><strong>
+                      <?=$mensaje?>
+                    </strong></td>
+                  </tr>
+                  <?php
+          }
+          ?>
+                  <tr>
+                    <td align="right">Correo electr&oacute;nico: </td>
+                    <td><input name="correo" type="text" class="texto_cajas" id="correo" value="<?=$_POST['correo']?>" maxlength="100">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Confirmaci&oacute;n de correo electr&oacute;nico: </td>
+                    <td><input name="correo2" type="text" class="texto_cajas" id="correo2" value="<?=$_POST['correo2']?>" maxlength="100">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Clave de ingreso:</td>
+                    <td><input name="clave" type="password" class="texto_cajas" id="clave" size="15" maxlength="10">
+                        <img src="img/icon_ok.png" width="14" height="14"> (m&aacute;ximo 10 caracteres)</td>
+                  </tr>
+                  <tr>
+                    <td align="right">Confirmaci&oacute;n de clave de ingreso:</td>
+                    <td><input name="clave2" type="password" class="texto_cajas" id="clave2" size="15" maxlength="10">
+                        <img src="img/icon_ok.png" width="14" height="14"> (m&aacute;ximo 10 caracteres)</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="right">Nombre(s):</td>
+                    <td><input name="nombre" type="text" class="texto_cajas" id="nombre" value="<?=$_POST['nombre']?>">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Apellido(s):</td>
+                    <td><input name="apellidos" type="text" class="texto_cajas" id="apellidos" value="<?=$_POST['apellidos']?>" size="40">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Estado:</td>
+                    <td><?=estados($_POST[estado], "texto_cajas", FALSE)
+?>
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Ciudad:</td>
+                    <td><input name="ciudad" type="text" class="texto_cajas" id="ciudad" value="<?=$_POST['ciudad']?>" maxlength="100">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Tel&eacute;fono particular con lada: </td>
+                    <td><input name="tel_personal" type="text" class="texto_cajas" id="tel_personal" value="<?=$_POST['tel_personal']?>" maxlength="20">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="right">Nombre de la empresa d&oacute;nde labora:</td>
+                    <td><input name="empresa" type="text" class="texto_cajas" id="empresa" value="<?=$_POST['empresa']?>" size="40" maxlength="150">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Puesto que ocupa:</td>
+                    <td><input name="puesto" type="text" class="texto_cajas" id="puesto" value="<?=$_POST['puesto']?>" size="40" maxlength="100">
+                        <img src="img/icon_ok.png" width="14" height="14"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Tel&eacute;fono con lada (incluya extensi&oacute;n, si aplica):</td>
+                    <td><input name="tel_empresa" type="text" class="texto_cajas" id="tel_empresa" value="<?=$_POST['tel_empresa']?>" maxlength="30"></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="texto_verdana_12px_grisclaro" align="right"><img src="img/icon_ok.png" width="14" height="14"> Datos olbigatorios para su registro</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="texto_verdana_10px_gris" align="right"><img src="img/pixel.gif" width="10" height="10" /></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="center"><input name="button" type="image" id="button" value="Submit" src="img/boton_registrarme.png">
+                    </td>
+                  </tr>
+                </form>
+            </table>
+                <?php
+        } else {
+        ?>
+                <br />
+              <br />
+              <span class="texto_verdana_14px_grisclaro">
+                <?=$mensaje?>
+                </span><br />
+              <img src="img/pixel.gif" width="1" height="280">
+                <?php
+        }
+        ?>
+            </td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+</html>

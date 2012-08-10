@@ -1,0 +1,87 @@
+<?php
+	require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+	require_once "../TEST/clases/Test_Clases_CorreosTests.php";
+	require_once "../TEST/clases/f_genericas_inc.php";
+	require_once "DB.php";
+	include_once "test_lfbypefe_des.inc.php";
+	if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE"){
+		$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, '', '', '');
+		$mensaje = $obj_acciones_form->recuperarClave($_POST['correo']);
+	}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><?php include "ENCABEZADO.html";?></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><img src="img/titulorecupera.jpg" width="511" height="117" /></td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td><table border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_14px_grisclaro">
+          <tr>
+            <td colspan="2"  align="center" style="color:red;"><?php print_r($mensaje); ?></td>
+          </tr>
+          <tr>
+            <td colspan="2"  align="right">La  clave de acceso ser&aacute; enviada a su correo electr&oacute;nico</td>
+          </tr>
+          <tr>
+            <td colspan="2"  align="right">&nbsp;</td>
+          </tr>
+          <form class="perResForm" action="<?=$PHP_SELF?>" method="post" id="perResForm">
+            <tr>
+              <td align="right">Correo electr&oacute;nico: </td>
+              <td><input name="correo" type="text" class="texto_cajas" id="correo"></td>
+            </tr>
+
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td colspan="2" align="center">
+              	<input type="hidden" name="enviar" value="TRUE">
+              	<input name="Submit" type="image" id="button" value="Submit" src="img/boton_enviar.png">              
+			  </td>
+            </tr>
+          </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+</html>

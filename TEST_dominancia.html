@@ -1,0 +1,192 @@
+<?php
+session_start();
+$referencia  = "TEST_dominancia_instrucciones.html";
+
+if (isset($_GET[logout])) {
+    unset($_SESSION['IDsess']);
+    unset($_SESSION['Sess_correo']);
+    session_unset();
+    session_destroy();
+}
+
+if (!strcmp($_SESSION['IDsess'], session_id()) && !empty($_SESSION['Sess_correo']) && $_SESSION['Sess_clave_test'] == 4) {
+    header("Location: $referencia");
+} else {
+ if(isset($_POST['correo'])) {
+		
+  if (!empty($_POST['correo']) && !empty($_POST['clave'])) {
+    require_once "DB.php";
+    require_once "f_genericas.inc.php";
+    include_once "test_lfbypefe_des.inc.php";
+        
+    $db = DBconnect($dsn);    
+    $clave_test = 4;   
+    $SQL = "SELECT correo, confirmado, nombre, apellido FROM USUARIO WHERE correo = '" . $_POST['correo'] . "' AND clave = MD5 ( '" . $_POST['clave']. "' );";
+	$RES = DBquery($SQL);
+    if ($RES->numRows()) {
+		$SQL_TEST = "SELECT * FROM TEST_RESPONDIDOS WHERE correo = '" . $_POST['correo'] . "' AND clave_test = '$clave_test'";
+		$RES_TES = DBquery($SQL_TEST);
+	    if($RES_TES->numRows()){
+			$_SESSION['flag_test'] = SI;
+			header("Location: inicio.html");
+			die();
+		}else{
+			$_SESSION['flag_test'] = NO;
+			$date =date('Y-m-d');
+			$SQL_INSERT = "INSERT INTO TEST_RESPONDIDOS VALUES (NULL , '', '" . $date . "', '', '', '$clave_test', '" . $_POST['correo'] . "')";
+			$RES_INSERT = DBquery($SQL_INSERT);
+			$SQL_TEST_RES = "SELECT * FROM TEST_RESPONDIDOS WHERE correo = '" . $_POST['correo'] . "' and clave_test = '$clave_test'";
+			
+			$RES_TEST_RES = DBquery($SQL_TEST_RES);
+			$row_test = $RES_TEST_RES->fetchRow(); 
+		}
+      $row = $RES->fetchRow();
+						if ($row[1] == 'S') {
+		$_SESSION['Sess_clave_test_respondidos'] = 	$row_test[0];	
+        $_SESSION['Sess_correo'] = $row[0];
+		$_SESSION['Sess_nombre'] = $row[2].' '.$row[3];
+        $_SESSION['Sess_clave_test'] = $clave_test;
+        $_SESSION['IDsess']          = session_id();
+								       
+        $db->disconnect();
+        header("Location: $referencia");
+						} else {
+							 $mensaje = "La cuenta de correo no ha sido confirmada,<br />por favor revise la cuenta de correo que registro<br />y siga las instrucciones.";
+						}
+    } else {
+         $mensaje = "La cuenta de correo electrónico <br />o la clave de ingreso son incorrectas.";
+    }
+  } else {
+      $mensaje = "Es necesario escribir su cuenta de correo electrónico<br />y la clave de ingreso.";
+  }
+	} else {
+  	$mensaje = "Ingrese su cuenta de correo<br />y la clave de ingreso para iniciar sesi&oacute;n.";	
+	}
+}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><img src="img/MENU.gif" width="134" height="44"></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td><table border="0" cellpadding="0" cellspacing="0" class="texto_verdana_10px_gris">
+              <tr>
+                <td>Inicio de sesi&oacute;n</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Instrucciones</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 1</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 2</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+              <tr>
+                <td bgcolor="#EDB918">&nbsp;</td>
+                <td bgcolor="#EDB918"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#FEF3EB">&nbsp;</td>
+                <td bgcolor="#FEF3EB"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#FEF3EB">&nbsp;</td>
+                <td bgcolor="#FEF3EB"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#FEF3EB">&nbsp;</td>
+                <td bgcolor="#FEF3EB"><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+            </table></td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_dominancia.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>
+          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td><table border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_11px_blanco">
+           <form action="<?=$PHP_SELF?>" method="post" name="acceso">
+          	<tr align="center" class="texto_cajas_naranja">
+              <td colspan="2"><?=$mensaje?></td>
+            </tr>
+            <tr>
+              <td align="right">Correo electr&oacute;nico: </td>
+              <td><input name="correo" type="text" class="texto_cajas" id="correo"></td>
+            </tr>
+            <tr>
+              <td align="right">Clave de ingreso:</td>
+              <td><input name="clave" type="password" class="texto_cajas" id="clave" size="10" maxlength="10"></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="2" class="texto_verdana_10px_gris" align="right"><a href="recupera_clave.html">Olvide mi contrase&ntilde;a</a><img src="img/pixel.gif" width="10" height="10" /></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="texto_verdana_10px_gris" align="right"><a href="registro.html">Registrarme</a><img src="img/pixel.gif" width="10" height="10" /></td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center"><input name="button" type="image" id="button" value="Submit" src="img/boton_entrar.png">
+              </td>
+            </tr>
+          </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+</html>

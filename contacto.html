@@ -1,0 +1,216 @@
+<?php
+include_once "f_genericas.inc.php";
+
+//-------VALIDACION DE LOS DATOS--------//
+$error = FALSE;
+if (isset($_POST['Submit'])) {
+   if (!longitud_valida($_POST['mensaje'], 5) || !longitud_valida($_POST['nombre'], 3) || !longitud_valida($_POST['apellido'], 3)
+       || (!es_mail($_POST['mail']))) {
+       $error = TRUE;
+   } else {
+       $cabecera   = "Sistema de test en linea (Contacto)";
+       $mensajetot = "\nAsunto    		: " . $_POST['asunto'];
+       $mensajetot.= "\nNombre    		: " . $_POST['nombre'] . " " . $_POST['apellido'];
+       $mensajetot.= "\nEmpresa 		: " . $_POST['empresa'];
+	   $mensajetot.= "\nPuesto que ocupa: " . $_POST['puesto'];
+	   $mensajetot.= "\nDirección 		: " . $_POST['dir'];
+       $mensajetot.= "\nMunicipio 		: " . $_POST['municipio'];
+       $mensajetot.= "\nTeléfono + LADA	: " . $_POST['tel'];
+       $mensajetot.= "\nCelular   		: " . $_POST['cel'];
+       $mensajetot.= "\nContactarme por	: " . $_POST['contacto'];
+       $mensajetot.= "\nMensaje   		: " . $_POST['mensaje'];
+       $mensajetot.= "\n---\n" . date ('d/m/Y');
+   		$enviado    = mail("paulina.moran@lfbypefe.com.mx",$cabecera,$mensajetot,"From:" . $_POST['mail'] . "\nMime-Version: 1.0\nX-Mailer: lfbypefe.com.mx\nIP: " . $_SERVER['REMOTE_ADDR']);
+       if ($enviado) {
+         $respuesta = "Para la empresa Language First su opinión es muy importante, en breve nos comunicaremos con usted para resolver sus dudas o bien atender sus peticiones.\n\n";
+         $respuesta.= "Si en 5 días hábiles no recibe respuesta y el medio de contacto que eligió fue vía telefónica, le suplicamos sea tan amable de corroborarnos sus datos, enviando un nuevo mensaje en nuestro sitio http://test.lfbypefe.com.mx/\n\n";
+         
+         mail($_POST['mail'], "Su mensaje fue recibido",$respuesta,"From:Languagefirst <noresponder@languagefirst.com.mx>\nMime-Version: 1.0\nX-Mailer: languagefirst.com.mx\nIP: " . $_SERVER['REMOTE_ADDR']);
+       }
+   }
+}
+//-------//
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><?php include "ENCABEZADO.html";?></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><img src="img/tituloenvio.jpg" width="511" height="117" /></td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="5" cellspacing="5" class="texto_verdana_12px_grisclaro">
+          <?php
+                   if ($enviado) {
+                   ?>
+          <tr>
+            <td align="center">Su mensaje ha sido enviado, en 
+              breve nos pondr&eacute;mos en contacto.<br>
+              Gracias<br>
+              <br>
+              <img src="img/mail.png" width="300" height="300"> </td>
+          </tr>
+          <?
+                   } else {
+                   ?>
+          <form name="form1" method="post" action="<?php print $PHP_SELF;?>">
+            <tr>
+              <td valign="top"><div align="justify"> <span class="TITULOAUTOS"> </span>
+                      <table border="0" align="center" class="texto_verdana_12px_grisclaro">
+                        <tr>
+                          <td class="lineabaja"><table width="100%" border="0" cellpadding="4" cellspacing="4" class="texto_verdana_11px_blanco">
+                              <tr>
+                                <td>Este es el espacio para sus comentarios, 
+                                  opiniones y sugerencias.
+                                  <p >Sus comentarios siempre ser&aacute;n 
+                                    bienvenidos y tomados en cuenta.<br>
+                                                                        <?php
+                                          if ($error) { 
+                                              print "<font color=#4199AB><b>El env&iacute;o no se puede completar debido a la falta de algunos datos importantes.</b></font>";
+                                          }
+                                          ?>
+                                  </p></td>
+                              </tr>
+                          </table></td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Mensaje</strong></td>
+                        </tr>
+                        <tr>
+                          <td><table border="0" align="center" class="texto_verdana_11px_blanco">
+                              <tr>
+                                <td><div align="right">Asunto:</div></td>
+                                <td><INPUT name=asunto class=texto_cajas size=60 maxLength=100 value="<?php print $_POST['asunto'];?>"></td>
+                              </tr>
+                              <tr>
+                                <td><div align="right">Mensaje:</div></td>
+                                <td><textarea name="mensaje" cols="65" rows="4" class="texto_cajas" id="mensaje"><?php print $_POST['mensaje'];?></textarea>
+                                <img src="img/icon_ok1.png" width="20" height="18"></td>
+                              </tr>
+                          </table></td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Informaci&oacute;n de contacto</strong></td>
+                        </tr>
+                        <tr>
+                          <td><TABLE border=0 align="center" cellPadding=0 cellSpacing=5 class=texto_verdana_11px_blanco>
+                              <TBODY>
+                                <TR>
+                                  <TD align=right noWrap class=D>Nombre:</TD>
+                                  <TD><INPUT name=nombre class=texto_cajas id="nombre" value="<?php print $_POST['nombre'];?>" size=15 maxLength=100>
+                                  <img src="img/icon_ok1.png" width="20" height="18"></TD>
+                                  <TD class=D noWrap align=right colSpan=3><span class="textomini2"><font color="#996600"><strong></strong></font></span> Apellido:</TD>
+                                  <TD><INPUT class=texto_cajas maxLength=100 size=15 name=apellido value="<?php print $_POST['apellido'];?>">
+                                  <img src="img/icon_ok1.png" width="20" height="18"></TD>
+                                </TR>
+                                <TR>
+                                  <TD class=D noWrap align=right> Empresa:</TD>
+                                  <TD><INPUT name=empresa class=texto_cajas id="empresa" value="<?php print $_POST['mail'];?>" size=15 maxLength=100></TD>
+                                  <TD class=D noWrap align=right colSpan=3><SPAN class=red></SPAN>Puesto 
+                                    que ocupa</TD>
+                                  <TD><INPUT name=puesto class=texto_cajas id="puesto" value="<?php print $_POST['tel'];?>" size=15 maxLength=100></TD>
+                                </TR>
+                                <TR>
+                                  <TD class=D noWrap align=right><span class="textomini2"><font color="#996600"><strong></strong></font></span> Mail:</TD>
+                                  <TD><INPUT class=texto_cajas maxLength=100 size=15 name=mail value="<?php print $_POST['mail'];?>">
+                                  <img src="img/icon_ok1.png" width="20" height="18"></TD>
+                                  <TD class=D noWrap align=right colSpan=3><SPAN class=red></SPAN>Tel&eacute;fono 
+                                    con Lada</TD>
+                                  <TD><INPUT name=tel class=texto_cajas id="tel" value="<?php print $_POST['tel'];?>" size=15 maxLength=100></TD>
+                                </TR>
+                                <TR>
+                                  <TD class=D noWrap align=right><SPAN class=red></SPAN>Tel&eacute;fono 
+                                    celular:</TD>
+                                  <TD><INPUT class=texto_cajas maxLength=100 size=15 name=cel value="<?php print $_POST['cel'];?>"></TD>
+                                  <TD class=D noWrap align=right colSpan=3>Contacto preferido:</TD>
+                                  <TD><SELECT name=contacto class="texto_cajas" style="WIDTH: 140px">
+                                      <OPTION value="Por mail" selected>Correo 
+                                        electr&oacute;nico</OPTION>
+                                      <OPTION value="Por tel&eacute;fono">Tel&eacute;fono 
+                                        personal</OPTION>
+                                      <OPTION value="Por celular">Tel&eacute;fono 
+                                        celular</OPTION>
+                                    </SELECT>
+                                  <img src="img/icon_ok1.png" width="20" height="18"> </TD>
+                                </TR>
+                                <TR>
+                                  <TD class=D noWrap align=right><SPAN class=red></SPAN>Domicilio:</TD>
+                                  <TD colSpan=5><INPUT name=dir class=texto_cajas id="dir" value="<?php print $_POST['dir'];?>" size=51 maxLength=100></TD>
+                                </TR>
+                                <TR>
+                                  <TD class=D noWrap align=right><SPAN class=red></SPAN>Municipio:</TD>
+                                  <TD><INPUT name=municipio class=texto_cajas size=15 maxLength=50 value="<?php print $_POST['municipio'];?>"></TD>
+                                  <TD align=right noWrap class=D><SPAN  class=red></SPAN></TD>
+                                  <TD>&nbsp;</TD>
+                                  <TD align=right class=D>&nbsp;</TD>
+                                  <TD noWrap>&nbsp;</TD>
+                                </TR>
+                              </TBODY>
+                          </TABLE></td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td align="right"><img src="img/icon_ok1.png" width="20" height="18"> Estos campos 
+                            son obligatorios</td>
+                        </tr>
+                        <tr>
+                          <td><div align="center">
+                              <input type="hidden" name="Submit" id="Submit">
+                              <input name="Submit" type="image" class="cajas" value="Enviar informaci&oacute;n" src="img/boton_enviar.png">
+                          </div></td>
+                        </tr>
+                      </table>
+              </div></td>
+            </tr>
+          </form>
+          <?php
+                   }//$enviado
+                   ?>
+        </table></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+</html>

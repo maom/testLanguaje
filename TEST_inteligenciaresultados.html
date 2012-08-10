@@ -1,0 +1,451 @@
+<?php
+	require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+	require_once "../TEST/clases/Test_Clases_CorreosTests.php";
+	require_once "../TEST/clases/f_genericas_inc.php";
+	require_once "DB.php";
+	include_once "test_lfbypefe_des.inc.php";
+	$fase_num = 15;  
+	$obj_acciones_form = new Test_Clases_AccionesFormulario('', '', '', '');
+	$obj_acciones_form->authTest('5');
+	$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, $fase_num, $_SESSION['Sess_clave_test'], $_SESSION['Sess_clave_test_respondidos']);
+	if($_SESSION['Sess_reporte']  == 'TRUE'){
+		$_SESSION['Sess_reporte'] = 'FALSE';
+		$reporte = $obj_acciones_form->generarReporteTestPorUsuario();
+	}
+	$nombre = $_SESSION['Sess_nombre'];
+	if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE"){
+		$obj_correo = new Test_Clases_CorreosTests;
+		$obj_correo->enviarCorreoInteligenciaEmocional($_POST);
+		unset($_SESSION['Sess_clave_test']);
+		session_unset();
+    	session_destroy();
+		header("location: inicio.html");
+	}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><img src="img/MENU.gif" width="134" height="44"></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td>&nbsp;</td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_inteligencia.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+          <form class="perResForm" action="<?=$PHP_SELF?>" method="post" id="perResForm">
+            <tr>
+              <td background="img/fondobajotitulo.gif" class="TITULO"><img src="img/pixel.gif" width="10" height="5" /></td>
+            </tr>
+            <tr>
+              <td bgcolor="#0779C5" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: SI DESEA ENVIAR ESTOS DATOS A SU CORREO D&Eacute; CLIC EN EL BOT&Oacute;N</strong></td>
+            </tr>
+            <tr>
+              <td background="img/fondobajotitulo.gif" class="TITULO">&nbsp;</td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido"><table width="665" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_12px_grisclaro">
+                <tr>
+                  <td width="67"><img src="img/icon_user_r.png" alt="Nombre del usuario" width="30" height="33"></td>
+                  <td width="319"><?=$nombre?></td>
+				  <input type="hidden" name="nombre" id="nombre" value="<?=$nombre?>">
+                  <td width="67"><img src="img/icon_test_r.png" alt="Test respondido" width="30" height="39"></td>
+                  <td width="186">Instrumento sobre dominancia cerebral</td>
+                </tr>
+                <tr>
+                  <td><img src="img/icon_mail.png" alt="Correo electr&oacute;nico registrado" width="30" height="32"></td>
+                  <td><?=$reporte['correo']?></td>
+				  <input type="hidden" name="correo" id="correo" value="<?=$reporte['correo']?>">
+                  <td><img src="img/icon_date_r.png" alt="Fecha de aplicaci&oacute;n" width="30" height="33"></td>
+                  <td><?=$reporte['fecha']?></td>
+				  <input type="hidden" name="fecha" id="fecha" value="<?=$reporte['fecha']?>">
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td><img src="img/icon_time_r.png" alt="Tiempo de resoluci&oacute;n" width="30" height="30"></td>
+                  <td><?=$reporte['minutos']?> minutos</td>
+				  <input type="hidden" name="minutos" id="minutos" value="<?=$reporte['minutos']?>">
+                </tr>
+                <tr>
+                  <td colspan="4" align="center"><img src="img/separador.gif" width="650" height="9"></td>
+                  </tr>
+                <tr>
+                  <td colspan="4"><table width="637" border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_14px_grisclaro">
+                    <tr>
+                      <td width="20"><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td width="75">GRUPO A</td>
+                      <td width="193" align="center"><?=$reporte['grupo_a']?> de 10</td>
+					  <input type="hidden" name="grupo_a" id="grupo_a" value="<?=$reporte['grupo_a']?>">
+                      <td width="336">Autoestima </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                      </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO B</td>
+                      <td align="center"><?=$reporte['grupo_b']?> de 10</td>
+					  <input type="hidden" name="grupo_b" id="grupo_b" value="<?=$reporte['grupo_b']?>">
+                      <td>Auto confianza </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO C</td>
+                      <td align="center"><?=$reporte['grupo_c']?> de 10</td>
+					  <input type="hidden" name="grupo_c" id="grupo_c" value="<?=$reporte['grupo_c']?>">
+                      <td>Competencia </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO D</td>
+                      <td align="center" ><?=$reporte['grupo_d']?> de 10</td>
+					  <input type="hidden" name="grupo_d" id="grupo_d" value="<?=$reporte['grupo_d']?>">
+                      <td>Fortaleza interna </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO E</td>
+                      <td align="center"><?=$reporte['grupo_e']?> de 10</td>
+					  <input type="hidden" name="grupo_e" id="grupo_e" value="<?=$reporte['grupo_e']?>">
+                      <td>Sentimiento de ser querido o amado </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO F</td>
+                      <td align="center"><?=$reporte['grupo_f']?> de 10</td>
+					  <input type="hidden" name="grupo_f" id="grupo_f" value="<?=$reporte['grupo_f']?>">
+                      <td>Autonom&iacute;a </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO G</td>
+                      <td align="center"><?=$reporte['grupo_g']?> de 10</td>
+					  <input type="hidden" name="grupo_g" id="grupo_g" value="<?=$reporte['grupo_g']?>">
+                      <td>Sentimiento con respeto al trato que recibimos </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO H</td>
+                      <td align="center"><?=$reporte['grupo_h']?> de 10</td>
+					   <input type="hidden" name="grupo_h" id="grupo_h" value="<?=$reporte['grupo_h']?>">
+                      <td>Capacidad de Integraci&oacute;n </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO I</td>
+                      <td align="center"><?=$reporte['grupo_i']?> de 10</td>
+					  <input type="hidden" name="grupo_i" id="grupo_i" value="<?=$reporte['grupo_i']?>">
+                      <td>Opini&oacute;n que nos merecen de los dem&aacute;s </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" align="center"><img src="img/separador.gif" width="600" height="9"></td>
+                    </tr>
+                    <tr>
+                      <td><img src="img/icon_ok1.png" width="20" height="18"></td>
+                      <td>GRUPO J</td>
+                      <td align="center"><?=$reporte['grupo_j']?> de 10</td>
+					  <input type="hidden" name="grupo_j" id="grupo_j" value="<?=$reporte['grupo_j']?>">
+                      <td>Principios por los que nos regimos </td>
+                    </tr>
+                  </table></td>
+                </tr>
+              </table>              </td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido">&nbsp;</td>
+            </tr>
+            <tr valign="top">
+              <input type="hidden" name="enviar" value="TRUE">
+              <td class="textocontenido" align="center"><input name="Submit" type="image" class="textocontenido2" value="Enviar mis datos y respuestas de este cuestionario" src="img/boton_enviaramail.png"></td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido">&nbsp;</td>
+            </tr>
+            <tr valign="top" bgcolor="#D5670D" class="texto_fase">
+              <td align="center" class="textocontenido"><strong>Reparemos ahora cu&aacute;l ser&iacute;a el estado &oacute;ptimo al alcanzar un equilibrio en:</strong></td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido"><table width="100%" border="0" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>AUTOESTIMA:</strong> Equivaldr&iacute;a a estar m&aacute;s (10) o menos (1) en equilibrio o satisfecho con el propio concepto de s&iacute; mismo y de acuerdo a la afirmaci&oacute;n &ldquo;Soy valioso como persona&rdquo;. Una persona con autoestima es consciente de sus puntos fuertes y flaquezas, un aprendiz permanece atento a sus propias experiencias para sacarles provecho. Tambi&eacute;n est&aacute; dotada de una extraordinaria capacidad de re&iacute;rse de s&iacute; mismo, por lo que las cr&iacute;ticas o ataques de otros le resbalan. <br>
+                    <br>
+                    El alto grado de autoestima se manifiesta como un conjunto de habilidades personales y sociales tales como: </td>
+                </tr>
+                <tr>
+                  <td align="center">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Esp&iacute;ritu innovador<br>                    &bull;	Aptitud para adaptarse a las circunstancias <br>                    &bull;	Confiabilidad: honradez, &eacute;tica, sinceridad, prudencia, sobriedad y firmeza. <br>
+                    &bull;	Confianza en s&iacute; mismo <br>                      &bull;	Conciencia de s&iacute; mismo <br>
+                      &bull;	Integridad y cumplimiento <br>
+                        &bull;	Comprensi&oacute;n de los dem&aacute;s <br>                          &bull;	Discernimiento social y empresarial <br>
+                        &bull;	Facilitadotes del desarrollo de los dem&aacute;s <br>
+                        &bull;	Buenos comunicadores y mediadores <br>                          &bull;	Habilidad de liderazgo <br>                          &bull;	Destreza para establecer fuertes lazos <br>
+                        &bull;	Disponibilidad para el trabajo en equipo <br>                          &bull;	Entusiastas, colaboradores y cooperadores </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>AUTOCONFIANZA:</strong> Corresponde al sentido de seguridad en lo que pensamos o hacemos. Dependiendo de la puntuaci&oacute;n, hacemos nuestra la afirmaci&oacute;n &ldquo;Me siento seguro de m&iacute; mismo&rdquo;. El desarrollo de esta capacidad le otorga al sujeto una confianza en todo aquello que hace, manifest&aacute;ndose en:</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Un digno comportamiento <br>                    &bull;	Firmeza de car&aacute;cter <br>                    &bull;	Mantenimiento de su palabra <br>
+                    &bull;	Pensamientos y acciones basados en la &eacute;tica y en el sentido com&uacute;n <br>                      &bull;	Precauci&oacute;n ante los riesgos no calculados </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>COMPETENCIA: </strong>O consideraci&oacute;n de la calidad de nuestros actos y comportamiento. Tiene mucho que ver con la valoraci&oacute;n que damos a la excelencia de nuestro trabajo. La calificaci&oacute;n nos dar&aacute; una indicaci&oacute;n para saber si somos eficaces. Esta pericia se exterioriza como:</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Creatividad <br>                    &bull;	Pensamiento hol&iacute;stico <br>                    &bull;	Idoneidad para definirse en cualquiera de las tres perspectivas mentales b&aacute;sicas <br>                    &bull;	Visi&oacute;n de futuro </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>FORTALEZA INTERNA:</strong> Nos da indicaci&oacute;n del control que asumimos sobre nuestros estados y emociones; si somos fuertes interiormente o si somos &ndash; en mayor o en menor grado- diestros en controlar situaciones de la vida. A esta facultad la llamamos auto control, como suficiencia para gestionar adecuadamente nuestros estados internos,, emociones y respuestas de posible conflictividad. Aquellas personas con un alto grado de fortaleza interna son:</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Equilibradas, dif&iacute;cilmente alterables en situaciones cr&iacute;ticas o de est&eacute;s general, y tremendamente positivadoras <br>
+                    &bull;	Manejan correctamente sus emociones, en especial aquellas de naturaleza conflictiva, y, como consecuencia, sus conductas son adecuadas en todo momento.<br>                      &bull;	De ese modo pueden permanecer atentas a la situaci&oacute;n, con pensamiento claro y creativo. </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>SENTIMIENTO DE SER QUERIDOS: </strong>C&oacute;mo consideramos que nos aman o si somos dignos de ello. Quienes tienen desarrollado este aspecto logran una armon&iacute;a en su sentimiento de afecto, consideran satisfecha su necesidad de amor, lo que los conduce a maneras equilibradas, afectuosas y a la vez independientes. Son personas capaces de saberse queridas en la distancia y de no necesitar insistentes muestras de afecto para ello. En sus relaciones de pareja y familia son: </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Fieles y responsables <br>                    &bull;	Afectuosos y alegres <br>                    &bull;	Cooperadores, detallistas y compartidores </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>AUTONOM&Iacute;A: </strong>Es la facultad de autogestionarnos a todos los niveles: econ&oacute;mico, f&iacute;sico, familiar, social, etc&eacute;tera. Se trata de la consideraci&oacute;n interna y externa de soberan&iacute;a e independencia. Estos son los individuos:</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Capaces de resurgir de sus propias cenizas <br>
+                    &bull;	Innovadores, abiertos al cambio, a las nuevas ideas y tendencias <br>                      &bull;	Creativos e ingeniosos en lo que se refiere a la concepci&oacute;n de recursos<br>                      &bull;	Encuentran soluciones originales y eficaces para todo tipo de problema </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>TRATO QUE RECIBIMOS: </strong>Valoraci&oacute;n que hacemos respeto a si obtenemos o no un trato justo por parte de los dem&aacute;s. Tanto este apartado, como los de integraci&oacute;n, opini&oacute;n que nos merecen los dem&aacute;s, e incluso normas por las que nos regimos, constituyen en eje centrar el manejo emocional dentro del &aacute;mbito laboral y social. En la actualidad, en el mundo empresarial y laboral en general, cada miembro solo dispone de un fragmento de la informaci&oacute;n total disponible, por lo que cada d&iacute;a resulta m&aacute;s importante saber relacionarse y comunicarse correctamente para que el grupo o equipo al que pertenecemos opere a niveles &oacute;ptimos. Por es por lo que resulta de vital importancia un desarrollo equilibrado en los &aacute;mbitos y estados emocionales que nos permiten una interacci&oacute;n grupal adecuada. Las personas que se saben manejar adecuadamente dentro de cualquier sistema humano &ndash;y si este es complejo, mucho m&aacute;s- son aquellas cuya inteligencia est&aacute; cultivada. Los individuos satisfechos y objetivos con la valoraci&oacute;n que hacen que ellos muestran un conjunto de actitudes y capacidades entre las que sobresalen: </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Ajenos a la necesidad de que les agradezcan lo hecho <br>                    &bull;	Act&uacute;an responsablemente y sin expectativas de reconocimiento <br>
+                    &bull;	Est&aacute;n dispuestos a sacrificarse en beneficio de objetivos superiores <br>                      &bull;	Saben estar y comportarse correctamente en cualquier lugar, momento y con quien est&eacute;n </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>INTEGRACI&Oacute;N</strong>: Potencial para integrarnos en grupos o para relacionarnos con ellos. Este apartado tiene mucho que ver con la actuaci&oacute;n y relaci&oacute;n laboral, as&iacute; como la disponibilidad para trabajar en grupo o en equipo. Por su parte:</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Saben reconocer y alentar el desarrollo y logros de los dem&aacute;s miembros de la colectividad<br>                    &bull;	Disponibilidad para renunciar a sus objetivos y aceptar los de la comunidad<br>                    &bull;	Flexibilidad y adaptabilidad a las necesidades del conjunto <br>                    &bull;	Motivadores y animadores del grupo <br>                    &bull;	Comprensi&oacute;n y atenci&oacute;n a las opiniones e ideas de los otros <br>
+                    &bull;	Ayudan a los miembros de la agrupaci&oacute;n en funci&oacute;n de las necesidades detectadas <br>
+                    &bull;	Aportan feedback t&eacute;cnico y personal de forma positiva para mejorar la relaci&oacute;n y la consecuci&oacute;n de las metas <br>
+                      &bull;	Siempre que pueden comparten y ense&ntilde;an a los dem&aacute;s lo que ellos saben por experiencia o informaci&oacute;n <br>                        &bull;	Son inspiradores y orientadores <br>
+                        &bull;	Estimulan proyectos y a&uacute;nan objetivos <br>                          &bull;	Son capaces de liderar y guiar al grupo para alcanzar sus metas <br>                          &bull;	Establecen y  mantienen un gran n&uacute;mero de relaciones personales y grupales diferentes. As&iacute; mismo, tienen fuertes v&iacute;nculos de amistad con los compa&ntilde;eros y personas allegadas. <br>
+                        &bull;	Se comunican frecuente y r&aacute;pidamente con sus amistades y conocidos <br>                          &bull;	Comparten planes y proyectos, alimentando las oportunidades de colaboraci&oacute;n <br>                          &bull;	Son cabezas precursores del esp&iacute;ritu de equipo o empresa (team building) <br>
+                        &bull;	Conf&iacute;an plenamente en la capacidad del conjunto como tal </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>OPINI&Oacute;N QUE NOS MERECE LOS DEM&Aacute;S:</strong> Esta &aacute;rea nos remite a c&oacute;mo consideramos al resto de la gente. Tiene su base en el valor que le damos a la afirmaci&oacute;n &ldquo;las personas con buenas por naturaleza&rdquo;. En funci&oacute;n a los valores adjudicados aqu&iacute;, pensamos que la gente es buena (10) o mala (1) en general. La &oacute;ptima catalogaci&oacute;n en el apartado presente, por parte del sujeto, muestra que posee:</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Disponibilidad y actitud de servicio <br>
+                    &bull;	Cumplimiento de compromisos y promesas <br>                      &bull;	Objetividad en el reconocimiento del feedback que reciben de los otros <br>                      &bull;	Comprensi&oacute;n respeto a los fallos o debilidades ajenas <br>
+                      &bull;	Crean y consolidad la amistad <br>                      &bull;	Facilitan la actividad dando oportunidades<br>                        &bull;	Conf&iacute;an en la capacidad de los dem&aacute;s <br>
+                        &bull;	Comunican abiertamente y sin segundas intenciones sus opiniones y sus quejas <br>                          &bull;	Evitan comentarios hirientes, c&iacute;nicos o de mal gusto respeto de otros, y especialmente si estos est&aacute;n ausentes </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#749230" class="texto_fase">
+                  <td><strong>PRINCIPIOS O NORMAS POR LAS QUE NOS REGIMOS: </strong>Los valores que hayas obtenido te dar&aacute;n informaci&oacute;n de si las reglas que usas en tu vida son flexibles y adaptables, o r&iacute;gidas e inflexibles y, por tanto, generadoras de conflictos. <br>
+                    <br>
+                    Cuando una persona dispone de c&aacute;nones tolerantes, interna y externamente se muestra: </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&bull;	Teniendo muy presente que el mapa no es el territorio <br>
+                    &bull;	Son comprensivos y tolerantes ante la rigidez mental de otras personas <br>
+                      &bull;	Asumen el principio de &ldquo;Donde fueres, haz lo que vieres&rdquo; <br>                        &bull;	Jam&aacute;s discuten sobre creencias <br>
+                        &bull;	Manejan bien a las personas dif&iacute;ciles o intransigentes sin alterarse ni empecinarse <br>                        &bull;	Permanecen calmados, mientras detectan los patrones de pensamiento del otro y el mejor modo de afrontarlo <br>
+                        &bull;	Est&aacute;n dispuestos a un esfuerzo y mejora constante, y a cambiar sus preceptos por cualquier otro que resulte m&aacute;s &uacute;til y beneficioso </td>
+                </tr>
+                <tr>
+                  <td align="center">--------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#D5670D" class="texto_fase">
+                  <td align="center"><strong>Adquirir un &oacute;ptimo perfeccionamiento en todas las &aacute;reas descritas equivaldr&iacute;a a un desarrollo de nuestra inteligencia emocional, y, como consecuencia, a una completa apertura de nuestras potencias. Pero no pierdas de vista que tal progreso solo puede ser posible alcanzando y manteniendo la conciencia de s&iacute; mismo, con trabajo deliberado y consciente, con disciplina, constancia y paciencia, y con atenci&oacute;n al aqu&iacute; y ahora. Recuerda que por azar nada ocurre.</strong></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+
+              </table></td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido"><p align="center">&nbsp;</p></td>
+            </tr>
+          </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+</html>

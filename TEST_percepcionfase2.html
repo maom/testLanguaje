@@ -1,0 +1,284 @@
+<?php
+	require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+	require_once "../TEST/clases/f_genericas_inc.php";
+	require_once "DB.php";
+	include_once "test_lfbypefe_des.inc.php";
+	$fase_num = 8;  
+	$obj_acciones_form = new Test_Clases_AccionesFormulario('', '', '', '');
+	$obj_acciones_form->authTest('3');
+	$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, $fase_num, $_SESSION['Sess_clave_test'], $_SESSION['Sess_clave_test_respondidos']);
+	require_once "../TEST/clases/Test_Clases_GenerarFases.php";
+	 
+	$obj_generar_fases = new Test_Clases_GenerarFases($dsn, $_SESSION['Sess_clave_test'], $fase_num);
+	
+	//se verifica que el usuario no contesto ya esta fase
+	$flag = $obj_acciones_form->verificarClaveTestYClaveFaseEnRespuestasUsuasrios();
+	if($flag == 'true'){
+		header("location: TEST_percepcionresultados.html");
+	}
+	if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE") {
+		$_SESSION['Sess_reporte'] ='TRUE'; 
+		$res = $obj_acciones_form->guardarFaseTest($_POST);
+		$_SESSION['Sess_time_t'] = $_POST['time_t'];
+		if($res['error'] == 'true'){
+	    	header("location: TEST_percepcionresultados.html");
+		}
+	}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php
+	$time = explode(':', $_SESSION['Sess_time_t']);
+	if(!$time[0]) $time[0]=0;
+	if(!$time[1]) $time[1]=0;
+	if(!$time[2]) $time[2]=0;
+	echo"<script language = 'javascript'>
+		var minutos1 =  $time[0]
+		var segundos1 = $time[1]
+		var decimas1 = $time[2]
+	</script>\n";
+?>
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><img src="img/MENU.gif" width="134" height="44"></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td><table border="0" cellpadding="0" cellspacing="0" class="texto_verdana_10px_gris">
+              <tr>
+                <td>Inicio de sesi&oacute;n</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 1</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 2</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+              </tr>
+              <tr>
+                <td bgcolor="#A60764">&nbsp;</td>
+                <td bgcolor="#A60764"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A60764">&nbsp;</td>
+                <td bgcolor="#A60764"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A60764">&nbsp;</td>
+                <td bgcolor="#A60764"><img src="img/pixel.gif" width="5" height="5" /></td>
+              </tr>
+            </table></td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_percepcion.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+        <form class="per2Form" action="<?=$PHP_SELF?>" method="post" id="per2Form">
+        <?php $obj_generar_fases->generarFase()?>
+		<!--
+          <tr>
+            <td bgcolor="#122D7A" class="texto_fase"><strong>FASE II</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+          <tr>
+            <td bgcolor="#800B4E" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: RESPONDA DE MANERA HONESTA CADA PREGUNTA</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+
+
+          <tr valign="top">
+            <td class="textocontenido"><table width="100%" border="0" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+              <tr>
+                <td width="3%" bgcolor="#F3F3F3"><strong>9)</strong></td>
+                <td width="97%"><p align="left">&nbsp; Si no encuentra las llaves,  &iquest;Qu&eacute; hace?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select9" class="texto_cajas_naranja" id="select9">
+                  <option value="Las busca mirando por todas partes">Las busca mirando por todas partes</option>
+                  <option value="Sacude los bolsillos o la cartera para o&iacute;r el ruido">Sacude los bolsillos o la cartera para o&iacute;r el ruido</option>
+                  <option value="Busca al tacto">Busca al tacto</option>
+                                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>10)</strong></td>
+                <td><p align="left">Si tuviera que quedarse en una isla desierta.&nbsp; &iquest;Qu&eacute; es lo que &nbsp;preferir&iacute;a llevar?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select2" class="texto_cajas_naranja" id="select2">
+                  <option value="Algunos libros buenos">Algunos libros buenos</option>
+                  <option value="Un radio port&aacute;til">Un radio port&aacute;til</option>
+                  <option value="Su bolsa de dormir">Su bolsa de dormir</option>
+                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>11)</strong></td>
+                <td><p align="left">&iquest;C&oacute;mo es su forma de vestir?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select" class="texto_cajas_naranja" id="select">
+                  <option value="Impecable">Impecable</option>
+                  <option value="Informal">Informal</option>
+                  <option value="Muy informal">Muy informal</option>
+                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>12)</strong></td>
+                <td><p align="left">&iquest;C&oacute;mo prefiere estar (moda)?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select3" class="texto_cajas_naranja" id="select3">
+                  <option value="Como se usa">Como se usa</option>
+                  <option value="Muy elegante">Muy elegante</option>
+                  <option value="C&oacute;modo">C&oacute;modo</option>
+                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>13)</strong></td>
+                <td><p align="left">Si tuviera todo el dinero necesario,  &iquest;Qu&eacute; har&iacute;a?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select4" class="texto_cajas_naranja" id="select4">
+                  <option value="Comprar una hermosa casa y quedarse ah&iacute;">Comprar una hermosa casa y quedarse ah&iacute;</option>
+                  <option value="Viajar, conocer el mundo">Viajar, conocer el mundo</option>
+                  <option value="Introducirse al mundo social">Introducirse al mundo social</option>
+                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>14)</strong></td>
+                <td><p align="left">Si pudiera elegir, &iquest;qu&eacute; preferir&iacute;a?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select5" class="texto_cajas_naranja" id="select5">
+                  <option value="Un gran m&eacute;dico">Un gran m&eacute;dico</option>
+                  <option value="Un gran m&uacute;sico">Un gran m&uacute;sico</option>
+                  <option value="Un gr&aacute;n pintor">Un gr&aacute;n pintor</option>
+                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>15)</strong></td>
+                <td><p align="left">&iquest;Qu&eacute; es lo m&aacute;s sexy para usted?</p>
+                  </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><select name="select6" class="texto_cajas_naranja" id="select6">
+                  <option value="La iluminaci&oacute;n tenue">La iluminaci&oacute;n tenue</option>
+                  <option value="El perfume">El perfume</option>
+                  <option value="Cierto tipo de m&uacute;sica">Cierto tipo de m&uacute;sica</option>
+                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+
+            </table>
+            </td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido">&nbsp;</td>
+          </tr>
+		  -->
+          <tr valign="top">
+            <td class="textocontenido"><p align="center">
+            	<input type="hidden" name="enviar" value="TRUE">
+                <input name="Submit" type="image" class="textocontenido2" value="Enviar mis datos y respuestas de este cuestionario" src="img/boton_seguir.png">
+            </p></td>
+          </tr>
+		  <tr>
+		  	<td><input type="hidden" name="time_t" id="time_t" value=""></td>
+		  </tr>
+		  </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+<script type="text/javascript" src="SCRIPTS/cronometro.js"></script>
+</html>

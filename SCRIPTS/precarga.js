@@ -1,0 +1,1 @@
+MM_preloadImages('img/MENU_test1.gif','img/MENU_registro1.gif','img/MENU_instrucciones1.gif','img/MENU_contacto1.gif','img/ventana_test_ingles1.png','img/ventana_test_liderazgo1.png','img/ventana_test_percepcion1.png','img/ventana_test_dominancia1.png','img/ventana_test_inteligencia1.png','img/MENU_contacto1.gif')

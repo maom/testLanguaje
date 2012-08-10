@@ -1,0 +1,84 @@
+@charset "utf-8";
+body {
+	background-image: url(../img/fondo.gif);
+	background-repeat: repeat-x;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #f0f0f0;
+}
+.texto_verdana_10px_gris {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color: #666666;
+}
+.texto_verdana_10px_gris A:link {text-decoration: none; color: #666666; }
+.texto_verdana_10px_gris A:visited {text-decoration: none; color: #666666; }
+.texto_verdana_10px_gris A:active {text-decoration: none; color: #666666; }
+.texto_verdana_10px_gris A:hover {text-decoration: underline; color:#CCCCCC; }
+.texto_verdana_12px_grisclaro {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	color: #666666;
+}
+.texto_verdana_11px_blanco {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #666666;
+}
+.texto_cajas {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #666666;
+	background-color: #E4E6E7;
+	border: 2px solid #999999;
+}
+.texto_verdana_14px_grisclaro {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	color: #666666;
+}
+.texto_verdana_9px_blanco {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+.texto_cajas_naranja {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #BE5C0C;
+	background-color: #F8F9FA;
+	border: 2px solid #999999;
+}
+.texto_fase {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.div_respuesta_categoria{ 
+	clear:both;
+	float:left;
+}
+.contenedor_categoria_respuesta{
+	clear:both;
+	width:45%;
+	float:left; 	
+}
+.espacio_respuestas{
+	clear:both;
+	height:0.5px;	
+}
+.error_mensaje{
+	font-size:13px;
+	color:red;
+}
+

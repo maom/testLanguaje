@@ -1,0 +1,370 @@
+<?php
+require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+require_once "../TEST/clases/f_genericas_inc.php";
+require_once "DB.php";
+include_once "test_lfbypefe_des.inc.php";
+$fase_num = 5; ///Sacar de la base el id de la fase deacuerdo al Test  
+$obj_acciones_form = new Test_Clases_AccionesFormulario('', '', '', '');
+$obj_acciones_form->authTest('2');
+$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, $fase_num, $_SESSION['Sess_clave_test'], $_SESSION['Sess_clave_test_respondidos']);
+require_once "../TEST/clases/Test_Clases_GenerarFases.php";
+
+$obj_generar_fases = new Test_Clases_GenerarFases($dsn, $_SESSION['Sess_clave_test'], $fase_num);
+
+//se verifica que el usuario no contesto ya esta fase
+$flag = $obj_acciones_form->verificarClaveTestYClaveFaseEnRespuestasUsuasrios();
+if($flag == 'true'){
+	header("location: TEST_liderazgofase2.html");
+}
+if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE") {
+	$res = $obj_acciones_form->guardarFaseTest($_POST);
+	$_SESSION['Sess_time_t'] = $_POST['time_t'];
+	if($res['error'] == 'true'){
+		 header("location: TEST_liderazgofase2.html");
+	}
+}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php
+	$time = explode(':', $_SESSION['Sess_time_t']);
+	if(!$time[0]) $time[0]=0;
+	if(!$time[1]) $time[1]=0;
+	if(!$time[2]) $time[2]=0;
+	echo"<script language = 'javascript'>
+		var minutos1 =  $time[0]
+		var segundos1 = $time[1]
+		var decimas1 = $time[2]
+	</script>\n";
+?>
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><a href="TEST_liderazgo_instrucciones_ventana.html" target="_blank" onMouseOver="MM_swapImage('MENU_instrucciones','','img/MENU_instrucciones_test1.gif',1)" onMouseOut="MM_swapImgRestore()"><img src="img/MENU_instrucciones_test.gif" name="MENU_contacto" width="134" height="44" border="0" id="MENU_instrucciones" /></a></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td><table border="0" cellpadding="0" cellspacing="0" class="texto_verdana_10px_gris">
+              <tr>
+                <td>Inicio de sesi&oacute;n</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Instrucciones</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 1</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 2</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+              <tr>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#FEF3EB">&nbsp;</td>
+                <td bgcolor="#FEF3EB"><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+            </table></td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_liderazgo.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	  	<td align="center" class="error_mensaje"><?=$res['mensaje']?></td>
+	  </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+        <form class="ld1Form" action="<?=$PHP_SELF?>" method="post" id="ld1Form">
+       <?php $obj_generar_fases->generarFase();?>
+	
+		<!--
+          <tr>
+            <td bgcolor="#122D7A" class="texto_fase"><strong>FASE I <img src="img/pixel.gif" width="50" height="10" />COMPETENCIAS</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+          <tr>
+            <td bgcolor="#A8C859" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: UBICA CADA COMPETENCIA DENTRO DE UNA DEBILIDAD O FORTALEZA, PUDIENDO SER &Eacute;STAS MODERADAS O SIGNIFICATIVAS</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+
+
+          <tr valign="top">
+            <td class="textocontenido texto_verdana_11px_blanco"><table width="851" border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_11px_blanco">
+              <tr>
+                <td width="22" bgcolor="#F3F3F3"><strong>1)</strong></td>
+                <td width="717"><p align="center"><strong>CAR&Aacute;CTER</strong><br>
+                      <strong></strong></p>
+                  <strong>Mostrando gran integridad y honestidad                  <br>
+                  </strong>- No digo algo y muestro lo contrario<br>
+                    - Llevo a cabo las promesas y los compromisos<br>
+                    - Gu&iacute;o a trav&eacute;s del ejemplo<br>
+                    - Tengo respeto y confianza de nuestros colegas de trabajo<br>
+                    - Honestidad y asertividad al tratar con otras personas en cualquier  clase de situaci&oacute;n
+                    <p>&nbsp;</p>
+                  </td>
+                <td width="123"><select name="select" class="texto_cajas_naranja" id="select">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select>                </td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>2)</strong></td>
+                <td><p align="center"><strong>CAPACIDAD PERSONAL</strong></p>
+                  <p><strong>Experiencia t&eacute;cnica y profesional</strong><br>
+                    - Cuento con conocimientos espec&iacute;ficos t&eacute;cnicos y laborales necesarios  en mi trabajo.<br>
+                    - Los dem&aacute;s me buscan para pedirme consejo<br>
+                    - Mis conocimientos y habilidades representan una considerable  contribuci&oacute;n hacia el logro de objetivos de la empresa<br>
+                    - Uso mis conocimientos t&eacute;cnicos para ayudar a resolver los problemas  de mi equipo<br>
+                    - He desarrollado credibilidad con los miembros de mi equipo por mi extenso  conocimiento y capacidad de resolver problemas</p></td>
+                <td><select name="select2" class="texto_cajas_naranja" id="select2">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>3)</strong></td>
+                <td><p><strong> Resolviendo problemas y analizando casos</strong><br>
+                  - Re&uacute;no informaci&oacute;n de diversas fuentes al momento de solucionar un  problema<br>
+  - Requiero informaci&oacute;n importante y precisa como una base para ampliar  las decisiones saludables para la empresa.<br>
+  - Eval&uacute;o la&nbsp; informaci&oacute;n de  manera sistem&aacute;tica utilizando una gran variedad de m&eacute;todos y t&eacute;cnicas ya  probados.<br>
+                    - Apoyo las nuevas ideas y enfoques<br>
+                    -  Coacheo a las otras personas para que sepan analizar la informaci&oacute;n af&iacute;n de  resolver problemas y tomar decisiones</p>
+                  </td>
+                <td><select name="select3" class="texto_cajas_naranja" id="select3">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>4)</strong></td>
+                <td><p><strong>Innovaci&oacute;n</strong><br>
+                  - Siempre genero soluciones creativas y doy varias alternativas para  resolver problemas<br>
+                    - Lidereo el pensamiento innovador a todos los niveles <br>
+                    - Creo una cultura de innovaci&oacute;n y &nbsp;aprendizaje que lleva al individuo a&nbsp; desarrollarse a trav&eacute;s de la empresa<br>
+                    - Doy apoyo y animo a otros cuando tratan de innovar incluso cuando  fallan. <br>
+                    -  Siembro en las otras personas ideas o prop&oacute;sitos&nbsp; que los llevan a&nbsp; tener nuevas visiones y mejoras</p>
+                  </td>
+                <td><select name="select4" class="texto_cajas_naranja" id="select4">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>5)</strong></td>
+                <td><p><strong>Practicar el auto- desarrollo</strong><br>
+                  - Hago esfuerzos constructivos para cambiar y mejorar bas&aacute;ndome en la  retroalimentaci&oacute;n de los dem&aacute;s<br>
+  - Busco constantemente c&oacute;mo desarrollar nuevas oportunidades<br>
+                    - Me hago responsable de mi propio desarrollo<br>
+                    - busco maneras de enfrentar retos en mi trabajo actual<br>
+                    -  Aprendo tanto del &eacute;xitos y del errores</p>
+                  </td>
+                <td><select name="select5" class="texto_cajas_naranja" id="select5">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>6)</strong></td>
+                <td><p align="center"><strong>ENFOQUE A RESULTADOS</strong></p>
+                  <p><strong>Pasi&oacute;n por resultados</strong><br>
+                    - Persigo las asignaciones y proyectos hasta haberlos completado<br>
+                    - Logro mis compromisos y los supero constantemente<br>
+                    - Genero compromiso en los dem&aacute;s para que logren sus objetivos  personales o de equipo<br>
+                    - Les doy responsabilidad a los dem&aacute;s para lograr sus resultados<br>
+                    -  Lidereo o gu&iacute;o a los dem&aacute;s para aumentar su productividad y lograr sus  objetivos en la empresa.</p>
+                  </td>
+                <td><select name="select6" class="texto_cajas_naranja" id="select6">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>7)</strong></td>
+                <td><p><strong>Establezco objetivos a corto plazo</strong><br>
+                  - Mantengo niveles altos de desempe&ntilde;o<br>
+                  - Fijo niveles medibles de excelencia para cada personal y para el  equipo de trabajo<br>
+                  - Promuevo un esp&iacute;ritu de mejora continua<br>
+                  - Genero confianza en las personas sabiendo que los objetivos son  logrables<br>
+                  -  Genero compromiso en todos los empleados para el logro de los objetivos del  equipo</p>
+                  </td>
+                <td><select name="select7" class="texto_cajas_naranja" id="select7">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>8)</strong></td>
+                <td><p><strong>Me responsabilizo por los resultados e iniciativa</strong><br>
+                  - Soy confiable para dar seguimiento a compromisos<br>
+                  - Me ofrezco para retar las asignaciones<br>
+                  - Me ofrezco de manera independiente&nbsp;  a resolver problemas inesperados y oportunidades <br>
+                  - Utilizo el tiempo adecuado para ayudar a otros a descubrir  oportunidades o resolver problemas</p>
+                  -  Modelo conductas proactivas</td>
+                <td><select name="select8" class="texto_cajas_naranja" id="select8">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>9)</strong></td>
+                <td><p align="center"><strong>HABILIDADES INTERPERSONALES</strong></p>
+                  <p><strong>Me comunico con poder y eficiencia</strong><br>
+                    - Ayudo a la gente a entender c&oacute;mo su trabajo contribuye a los  objetivos empresariales<br>
+                    -Utilizo habilidades de comunicaci&oacute;n escrita u orales para comunicar  hechos, datos e ideas a los dem&aacute;s<br>
+                    - Desarrollo presentaciones y conferencias efectivas<br>
+                    - Doy instrucciones claras y comprensibles a otros empleados<br>
+                    -  Rompo las barreras de comunicaci&oacute;n entre los dem&aacute;s: equipos, departamentos y  funciones</p>
+                  </td>
+                <td><select name="select9" class="texto_cajas_naranja" id="select9">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>10)</strong></td>
+                <td><p><strong>Inspiro y motivo a otros hacia el alto desempe&ntilde;o</strong><br>
+                  - Soy persuasivo de manera efectiva para que esto resulte en  compromiso hacia la ideas o acciones<br>
+                  - Formo coaliciones informales tras bambalinas para apoyar las ideas<br>
+                  - Utilizo gran variedad de estrategias motivacionales para influir  positivamente en la conducta de los dem&aacute;s<br>
+                  - Demuestro un marco ganar/ganar durante las negociaciones o  decisiones grupales<br>
+                  -  Inspiro a los dem&aacute;s en apoyo a las prioridades organizacionales</p>
+                  </td>
+                <td><select name="select10" class="texto_cajas_naranja" id="select10">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+
+            </table></td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido">&nbsp;</td>
+          </tr>
+		  -->
+          <tr valign="top">
+            <td class="textocontenido"><p align="center">
+				<input type="hidden" name="enviar" value="TRUE">
+                <input name="Submit" type="image" class="textocontenido2" value="Enviar mis datos y respuestas de este cuestionario" src="img/boton_seguir.png">
+            </p></td>
+          </tr>
+		  <tr>
+		  	<td><input type="hidden" name="time_t" id="time_t" value=""></td>
+		  </tr>
+		  </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+<script type="text/javascript" src="SCRIPTS/cronometro.js"></script>
+</html>

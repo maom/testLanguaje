@@ -1,0 +1,500 @@
+<?php
+require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+require_once "../TEST/clases/f_genericas_inc.php";
+require_once "DB.php";
+include_once "test_lfbypefe_des.inc.php"; 
+$fase_num = 9; ///Sacar de la base el id de la fase deacuerdo al Test  
+$obj_acciones_form = new Test_Clases_AccionesFormulario('', '', '', '');
+$obj_acciones_form->authTest('4');
+$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, $fase_num, $_SESSION['Sess_clave_test'], $_SESSION['Sess_clave_test_respondidos']);
+require_once "../TEST/clases/Test_Clases_GenerarFases.php";
+
+$obj_generar_fases = new Test_Clases_GenerarFases($dsn, $_SESSION['Sess_clave_test'], $fase_num);
+
+//se verifica que el usuario no contesto ya esta fase
+$flag = $obj_acciones_form->verificarClaveTestYClaveFaseEnRespuestasUsuasrios();
+if($flag == 'true'){
+	header("location: TEST_dominanciafase2.html");
+}
+if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE") {
+	$res = $obj_acciones_form->guardarFaseTest($_POST);
+	$_SESSION['Sess_time_t'] = $_POST['time_t'];
+	if($res['error'] == 'true'){
+		 header("location: TEST_dominanciafase2.html");
+	}
+}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php
+	$time = explode(':', $_SESSION['Sess_time_t']);
+	if(!$time[0]) $time[0]=0;
+	if(!$time[1]) $time[1]=0;
+	if(!$time[2]) $time[2]=0;
+	echo"<script language = 'javascript'>
+		var minutos1 =  $time[0]
+		var segundos1 = $time[1]
+		var decimas1 = $time[2]
+	</script>\n";
+?>
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><a href="TEST_dominancia_instrucciones_ventana.html" target="_blank" onMouseOver="MM_swapImage('MENU_instrucciones','','img/MENU_instrucciones_test1.gif',1)" onMouseOut="MM_swapImgRestore()"><img src="img/MENU_instrucciones_test.gif" name="MENU_contacto" width="134" height="44" border="0" id="MENU_instrucciones" /></a></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td><table border="0" cellpadding="0" cellspacing="0" class="texto_verdana_10px_gris">
+              <tr>
+                <td>Inicio de sesi&oacute;n</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Instrucciones</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 1</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 2</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+              <tr>
+                <td bgcolor="#EDB918">&nbsp;</td>
+                <td bgcolor="#EDB918"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#EDB918">&nbsp;</td>
+                <td bgcolor="#EDB918"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#EDB918">&nbsp;</td>
+                <td bgcolor="#EDB918"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#FEF3EB">&nbsp;</td>
+                <td bgcolor="#FEF3EB"><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+            </table></td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_dominancia.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	  	<td align="center" class="error_mensaje"><?=$res['mensaje']?></td>
+	  </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+          <form class="dm1Form" action="<?=$PHP_SELF?>" method="post" id="dm1Form">
+       		<?php $obj_generar_fases->generarFase();?>
+		<!--
+          <tr>
+            <td bgcolor="#122D7A" class="texto_fase"><strong>FASE I <img src="img/pixel.gif" width="50" height="10" />CUADRANTE A Y B</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+          <tr>
+            <td bgcolor="#B6940C" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: ELABORE UN PROCESO DE AUTO-EVALUACI&Oacute;N DE CADA UNO DE LOS ASPECTOS O ACTIVIDADES QUE APARECEN A CONTINUACI&Oacute;N DE ACUERDO CON SU DESEMPE&Ntilde;O EN ELLOS.<br>
+            </strong><strong>NOTA: Del grado de sinceridad depende la objetividad de esta prueba.</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco"><table border="0" align="center" cellpadding="4" cellspacing="4" class="texto_verdana_14px_grisclaro">
+              <tr>
+                <td><img src="img/icon_brain.png" width="30" height="29"></td>
+                <td><strong>CUADRANTE A SUPERIOR IZQUIERDO CEREBRAL</strong></td>
+              </tr>
+            </table>              </td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+
+
+          <tr valign="top">
+            <td class="textocontenido"><table width="851" border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_11px_blanco">
+              <tr>
+                <td width="22" bgcolor="#F3F3F3"><strong>1)</strong></td>
+                <td width="717">Tengo Habilidades espec&iacute;ficas en el campo de las matem&aacute;ticas y las       ciencias</td>
+                <td width="123"><select name="select2" class="texto_cajas_naranja" id="select2">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                                                                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>2)</strong></td>
+                <td>Pienso que la mejor forma de resolver un problema es siendo       anal&iacute;tico</td>
+                <td><select name="select" class="texto_cajas_naranja" id="select">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>3)</strong></td>
+                <td>Me inclino hacia la cr&iacute;tica en todos los asuntos</td>
+                <td><select name="select3" class="texto_cajas_naranja" id="select3">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>4)</strong></td>
+                <td>Tengo habilidades para solucionar problemas complejos de manera       l&oacute;gica</td>
+                <td><select name="select4" class="texto_cajas_naranja" id="select4">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>5)</strong></td>
+                <td>Antes de tomar algo como verdadero, lo compruebo, e indago otras       fuentes</td>
+                <td><select name="select5" class="texto_cajas_naranja" id="select5">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>6)</strong></td>
+                <td>Tengo capacidad de comprender, y manipular n&uacute;meros y estad&iacute;sticas       de acuerdo con un fin</td>
+                <td><select name="select6" class="texto_cajas_naranja" id="select6">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>7)</strong></td>
+                <td>Me gusta solucionar problemas inclin&aacute;ndome&nbsp; a conocerlos y buscar mediciones       exactas</td>
+                <td><select name="select7" class="texto_cajas_naranja" id="select7">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>8)</strong></td>
+                <td>Tengo la capacidad frente a los problemas de razonar en forma       deductiva, a partir de alguna teor&iacute;a</td>
+                <td><select name="select8" class="texto_cajas_naranja" id="select8">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>9)</strong></td>
+                <td>Ante un problema; al descomponer las ideas las relaciono con la       totalidad.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                <td><select name="select9" class="texto_cajas_naranja" id="select9">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>10)</strong></td>
+                <td>Selecciono  alternativas sobre la base de la raz&oacute;n-inteligencia; en oposici&oacute;n al instinto, a la emoci&oacute;n.&nbsp;</td>
+                <td><select name="select10" class="texto_cajas_naranja" id="select10">
+                  <option value="5" selected>Lo que hago mejor</option>
+                  <option value="4">Lo que hago bien</option>
+                  <option value="3">Lo que hago regular</option>
+                  <option value="2">Lo que hago menos bien</option>
+                  <option value="1">Lo que hago peor</option>
+                </select></td>
+              </tr>
+
+            </table></td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido">&nbsp;</td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido">&nbsp;</td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco"><table border="0" align="center" cellpadding="4" cellspacing="4" class="texto_verdana_14px_grisclaro">
+                <tr>
+                  <td><img src="img/icon_brain.png" width="30" height="29"></td>
+                  <td><strong>CUADRANTE B INFERIOR  IZQUIERDO L&Iacute;MBICO</strong></td>
+                </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido"><table width="851" border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_11px_blanco">
+                <tr>
+                  <td width="22" bgcolor="#F3F3F3"><strong>1)</strong></td>
+                  <td width="717"><p>La planificaci&oacute;n y  la organizaci&oacute;n son prioritarias en mis actividades</p>
+                    </td>
+                  <td width="123"><select name="select10" class="texto_cajas_naranja" id="select11">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>2)</strong></td>
+                  <td><p>Es importante para  mi tener un lugar para cada cosa y cada cosa en su lugar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> </strong><br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select12">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>3)</strong></td>
+                  <td><p>Acostumbro escuchar  las opiniones de los dem&aacute;s y hacer aclaraciones<br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select13">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>4)</strong></td>
+                  <td><p>Prefiero las  instrucciones espec&iacute;ficas en lugar de aquellas generales que dejan muchos  detalles opcionales<br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select14">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>5)</strong></td>
+                  <td><p>Pongo mucha atenci&oacute;n  en los peque&ntilde;os detalles o partes de un proyecto<br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select15">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>6)</strong></td>
+                  <td><p>Tengo capacidad de  control y dominio de mis emociones cuando elaboro un plan o proyecto<br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select16">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>7)</strong></td>
+                  <td><p>Pienso que trabajar  con un m&eacute;todo paso a paso es la mejor manera de resolver mi problema<br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select17">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>8)</strong></td>
+                  <td><p>Tengo habilidades  espec&iacute;ficas en el manejo de auditorio o hablar en p&uacute;blico<br>
+                  </p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select18">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>9)</strong></td>
+                  <td><p>Formulo m&eacute;todos o  medios para alcanzar un fin deseado, antes de pasar a la acci&oacute;n</p>
+                    </td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select19">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+                <tr>
+                  <td bgcolor="#F3F3F3"><strong>10)</strong></td>
+                  <td>Tengo la capacidad de  coordinar a las personas o de ordenar los elementos para lograr relaciones  coherentes y armoniosas</td>
+                  <td><select name="select10" class="texto_cajas_naranja" id="select20">
+                      <option value="5" selected>Lo que hago mejor</option>
+                      <option value="4">Lo que hago bien</option>
+                      <option value="3">Lo que hago regular</option>
+                      <option value="2">Lo que hago menos bien</option>
+                      <option value="1">Lo que hago peor</option>
+                  </select></td>
+                </tr>
+            </table></td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido">&nbsp;</td>
+          </tr>-->
+          <tr valign="top">
+            <td class="textocontenido"><p align="center">
+            	<input type="hidden" name="enviar" value="TRUE">
+                <input name="Submit" type="image" class="textocontenido2" value="Enviar mis datos y respuestas de este cuestionario" src="img/boton_seguir.png">
+            </p></td>
+          </tr>
+		  <tr>
+		  	<td><input type="hidden" name="time_t" id="time_t" value=""></td>
+		  </tr>
+		  </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+<script type="text/javascript" src="SCRIPTS/cronometro.js"></script>
+</html>

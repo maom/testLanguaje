@@ -1,0 +1,321 @@
+<?php
+require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+require_once "../TEST/clases/f_genericas_inc.php";
+require_once "DB.php";
+include_once "test_lfbypefe_des.inc.php";
+$fase_num = 6; ///Sacar de la base el id de la fase deacuerdo al Test  
+$obj_acciones_form = new Test_Clases_AccionesFormulario('', '', '', '');
+$obj_acciones_form->authTest('2');
+$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, $fase_num, $_SESSION['Sess_clave_test'], $_SESSION['Sess_clave_test_respondidos']);
+require_once "../TEST/clases/Test_Clases_GenerarFases.php";
+
+$obj_generar_fases = new Test_Clases_GenerarFases($dsn, $_SESSION['Sess_clave_test'], $fase_num);
+
+//se verifica que el usuario no contesto ya esta fase
+$flag = $obj_acciones_form->verificarClaveTestYClaveFaseEnRespuestasUsuasrios();
+if($flag == 'true'){
+	header("location: TEST_liderazgoresultados.html");
+}
+if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE") {
+	$res = $obj_acciones_form->guardarFaseTest($_POST);
+	$_SESSION['Sess_time_t'] = $_POST['time_t'];
+	if($res['error'] == 'true'){
+		$_SESSION['Sess_reporte'] ='TRUE';
+		 header("location: TEST_liderazgoresultados.html");
+	}
+}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php
+	$time = explode(':', $_SESSION['Sess_time_t']);
+	if(!$time[0]) $time[0]=0;
+	if(!$time[1]) $time[1]=0;
+	if(!$time[2]) $time[2]=0;
+	echo"<script language = 'javascript'>
+		var minutos1 =  $time[0]
+		var segundos1 = $time[1]
+		var decimas1 = $time[2]
+	</script>\n";
+?>
+
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><a href="TEST_liderazgo_instrucciones_ventana.html" target="_blank" onMouseOver="MM_swapImage('MENU_instrucciones','','img/MENU_instrucciones_test1.gif',1)" onMouseOut="MM_swapImgRestore()"><img src="img/MENU_instrucciones_test.gif" name="MENU_contacto" width="134" height="44" border="0" id="MENU_instrucciones" /></a></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td><table border="0" cellpadding="0" cellspacing="0" class="texto_verdana_10px_gris">
+              <tr>
+                <td>Inicio de sesi&oacute;n</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Instrucciones</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 1</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td>Fase 2</td>
+                <td><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+              <tr>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                <td bgcolor="#A8C859">&nbsp;</td>
+                <td bgcolor="#A8C859"><img src="img/pixel.gif" width="5" height="5" /></td>
+                </tr>
+            </table></td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_liderazgo.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	  	<td align="center" class="error_mensaje"><?=$res['mensaje']?></td>
+	  </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+         <form class="ld2Form" action="<?=$PHP_SELF?>" method="post" id="ld2Form">
+          <?php $obj_generar_fases->generarFase();?>
+		<!--
+          <tr>
+            <td bgcolor="#122D7A" class="texto_fase"><strong>FASE II <img src="img/pixel.gif" width="50" height="10" />COMPETENCIAS</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+          <tr>
+            <td bgcolor="#8CAF3A" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: UBICA CADA COMPETENCIA DENTRO DE UNA DEBILIDAD O FORTALEZA, PUDIENDO SER &Eacute;STAS MODERADAS O SIGNIFICATIVAS</strong></td>
+          </tr>
+          <tr>
+            <td class="texto_verdana_9px_blanco">&nbsp;</td>
+          </tr>
+
+
+          <tr valign="top">
+            <td class="textocontenido"><table width="851" border="0" align="center" cellpadding="1" cellspacing="1" class="texto_verdana_11px_blanco">
+              <tr>
+                <td width="22" bgcolor="#F3F3F3"><strong>11)</strong></td>
+                <td width="717"><p><strong>Construyo relaciones</strong><br>
+                  - Me gano la confianza de los miembros del equipo<br>
+                  - Tengo una preocupaci&oacute;n equilibrada entre la producci&oacute;n y los  resultados y soy sensible a las necesidades o problemas de los empleados<br>
+                  - Generalmente estoy disponible y soy amigable<br>
+                  - Manejo las situaciones dif&iacute;ciles constructivamente y con tacto<br>
+                  -  Mantengo y utilizo relaciones fuera de la compa&ntilde;&iacute;a para obtener recursos o  informaci&oacute;n</p>                  </td>
+                <td width="123"><select name="select" class="texto_cajas_naranja" id="select">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select>                </td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+                </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>12)</strong></td>
+                <td><p><strong>Desarrollo de los  dem&aacute;s</strong><br>
+                  - Act&uacute;o como Coach o mentor <br>
+                  - Me preocupa el desarrollo profesional de los dem&aacute;s<br>
+                  - Doy retroalimentaci&oacute;n individual positiva y equilibrada<br>
+                  - Doy alta prioridad al desarrollo de los dem&aacute;s<br>
+                  -  Identifico y promuevo que los dem&aacute;s tengan oportunidades de desarrollo que les  ayuden a tener m&aacute;s experiencia y pr&aacute;ctica</p>                  </td>
+                <td><select name="select2" class="texto_cajas_naranja" id="select2">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>13)</strong></td>
+                <td><p><strong>Colaboraci&oacute;n y trabajo en equipo</strong><br>
+                  - He desarrollado relaciones de trabajo de cooperaci&oacute;n entre la gente  y la empresa<br>
+                  - Aseguro que las unidades de trabajo funcionen adecuadamente entre  diferentes grupos y departamentos<br>
+                  - Mi equipo conf&iacute;a en m&iacute; y me respeta<br>
+                  - Elimino las barreras para lograr que el equipo se desarrollo  positivamente<br>
+                  -  Resuelvo los conflictos e inconvenientes que afectan la efectividad del equipo</p>                  </td>
+                <td><select name="select3" class="texto_cajas_naranja" id="select3">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>14)</strong></td>
+                <td><p align="center"><strong>GUIANDO EL CAMBIO ORGANIZACIONAL</strong></p>
+                  <p><strong>Desarrollo perspectivas estrat&eacute;gicamente</strong><br>
+                    - Demuestro un pensamiento vanguardista en relaci&oacute;n a temas de trabajo<br>
+                    - Propongo iniciativas que se integran como parte del plan estrat&eacute;gico  de la empresa<br>
+                    - Aclaro la visi&oacute;n, misi&oacute;n y valores y objetivos de largo plazo para  los dem&aacute;s<br>
+                    -  Les explico a los dem&aacute;s c&oacute;mo los cambios en un &aacute;rea de la organizaci&oacute;n afectan  el sistema organizacional<br>
+- Me aseguro que todos los sistemas de la organizaci&oacute;n est&eacute;n alineados hacia  los objetivos estrat&eacute;gicos</p>                  </td>
+                <td><select name="select4" class="texto_cajas_naranja" id="select4">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>15)</strong></td>
+                <td><p><strong>Lidereando el cambio</strong><br>
+                      <strong>&nbsp;</strong>- Vendo efectivamente los proyectos de mi equipo,  programas o productos<br>
+                  - Animo a que los otros cambien se&ntilde;alando la necesidad para el cambio<br>
+                  - Ayudo a que los dem&aacute;s logren superar su resistencia al cambio<br>
+                  - Apoyo las iniciativas organizacionales de manera que mi gente  comprenda, aprecie y apoye estos cambios<br>
+                  -  Me aseguro de que la gente comprenda la relaci&oacute;n entre la iniciativa del cambio  organizacional y la direcci&oacute;n estrat&eacute;gica del negocio</p>                  </td>
+                <td><select name="select5" class="texto_cajas_naranja" id="select5">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td bgcolor="#F3F3F3"><strong>16)</strong></td>
+                <td><p><strong>Relaciono a los grupos internos con el mundo exterior</strong><br>
+                  - Represento el trabajo de mi equipo con equipos clave afuera de mi  grupo o departamento<br>
+                  -Ayudo a que la gente comprenda que la satisfacci&oacute;n de las necesidades  de nuestros clientes son prioritarias para la misi&oacute;n y objetivos de la  organizaci&oacute;n<br>
+                  - s&eacute; c&oacute;mo generar productos o servicios que satisfagan a nuestros  clientes logrando exceder sus expectativas<br>
+                  - utilizo conocimientos y doy retroalimentaci&oacute;n hacia la mejora  continua de nuestros productos y servicios<br>
+                  -  Comprendo las necesidades de los clientes y las transmito en mis planes  estrat&eacute;gicos organizacionales, objetivos, y direcci&oacute;n.&nbsp; </p>                  </td>
+                <td><select name="select6" class="texto_cajas_naranja" id="select6">
+                  <option value="FS" selected>Fortaleza  significativa</option>
+                  <option value="FM">Fortaleza  moderada</option>
+                  <option value="DS">Debilidad significativa</option>
+                  <option value="DM">Debilidad moderada</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center"><img src="img/separador.gif" width="857" height="9"></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center">&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="3" bgcolor="#8CAF3A" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: ANOTA CUALES SON LAS FORTALEZAS Y DEBILIDADES QUE PERCIBIO COMO SIGNIFICATIVAS O COMO MODERADAS</strong></td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center">&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><table width="200" border="0" cellpadding="3" cellspacing="3" class="texto_verdana_11px_blanco">
+                  <tr>
+                    <td>FORTALEZAS SIGNIFICATIVAS</td>
+                    <td>FORTALEZAS MODERADAS:</td>
+                  </tr>
+                  <tr>
+                    <td><textarea name="textfield" cols="50" rows="4" class="texto_cajas_naranja" id="textfield"></textarea></td>
+                    <td><textarea name="textfield2" cols="50" rows="4" class="texto_cajas_naranja" id="textfield2"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td>DEBILIDADES MODERADAS:</td>
+                    <td>DEBILIDADES SIGNIFICATIVAS:</td>
+                  </tr>
+                  <tr>
+                    <td><textarea name="textfield4" cols="50" rows="4" class="texto_cajas_naranja" id="textfield4"></textarea></td>
+                    <td><textarea name="textfield3" cols="50" rows="4" class="texto_cajas_naranja" id="textfield3"></textarea></td>
+                  </tr>
+
+                </table>                  </td>
+                <td>&nbsp;</td>
+              </tr>
+
+            </table></td>
+          </tr>
+          <tr valign="top">
+            <td class="textocontenido">&nbsp;</td>
+          </tr>
+          <tr valign="top">
+          	-->
+            <td class="textocontenido"><p align="center">
+            	<input type="hidden" name="enviar" value="TRUE">
+                <input name="Submit" type="image" class="textocontenido2" value="Enviar mis datos y respuestas de este cuestionario" src="img/boton_guardar.png">
+            </p></td>
+          </tr>
+		  <tr>
+		  	<td><input type="hidden" name="time_t" id="time_t" value=""></td>
+		  </tr>
+		  </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+<script type="text/javascript" src="SCRIPTS/cronometro.js"></script>
+</html>

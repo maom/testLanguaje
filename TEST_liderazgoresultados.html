@@ -1,0 +1,154 @@
+<?php
+	require_once "../TEST/clases/Test_Clases_AccionesFormulario.php";
+	require_once "../TEST/clases/Test_Clases_CorreosTests.php";
+	require_once "../TEST/clases/f_genericas_inc.php";
+	require_once "DB.php";
+	include_once "test_lfbypefe_des.inc.php";
+	$fase_num = 6;  
+	$obj_acciones_form = new Test_Clases_AccionesFormulario('', '', '', '');
+	$obj_acciones_form->authTest('2');
+	$obj_acciones_form = new Test_Clases_AccionesFormulario($dsn, $fase_num, $_SESSION['Sess_clave_test'], $_SESSION['Sess_clave_test_respondidos']);
+	if($_SESSION['Sess_reporte']  == 'TRUE'){
+		$_SESSION['Sess_reporte'] = 'FALSE';
+		$reporte = $obj_acciones_form->generarReporteTestPorUsuario();
+	}
+	$nombre = $_SESSION['Sess_nombre'];
+	if (isset($_POST['enviar']) AND $_POST['enviar'] == "TRUE"){
+		$obj_correo = new Test_Clases_CorreosTests;
+		$obj_correo->enviarCorreoTestLiderazgoFuerzaDebilidades($_POST);
+		unset($_SESSION['Sess_clave_test']);
+		session_unset();
+    	session_destroy();
+		header("location: inicio.html");
+	}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>::::..:: Practical Education for Executives  :.:.:  SISTEMA DE TEST EN LINEA</title>
+
+
+<link href="SCRIPTS/estilos.css" rel="stylesheet" type="text/css">
+<?php include "SCRIPTS/script_mouseover.js";?>
+<?php include "SCRIPTS/FECHA.js";?>
+
+</head>
+
+<body onLoad="<?php include "SCRIPTS/precarga.js";?>">
+<table width="977" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td background="img/fondo_encabezado.gif"><table width="977" border="0" cellpadding="0" cellspacing="0" id="ENCABEZADO">
+      <tr>
+        <td width="411" rowspan="3"><img src="img/logo.gif" width="411" height="100" border="0" /></td>
+        <td width="566"></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" class="texto_verdana_10px_gris"><strong>
+          <script language="JavaScript" type="text/javascript">  
+MostrarFecha();   
+    </script>
+          <img src="img/pixel.gif" width="20" height="20" /></strong></td>
+      </tr>
+      <tr>
+        <td valign="bottom"><table width="134" border="0" align="right" cellpadding="0" cellspacing="0" id="MENU">
+            <tr>
+              <td width="134"><img src="img/MENU.gif" width="134" height="44"></td>
+            </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td background="img/fondo_contenido.gif" bgcolor="#393B3F"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td align="center"><table border="0" align="right" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+            <td>&nbsp;</td>
+            <td><img src="img/pixel.gif" width="120" height="8" /></td>
+            <td align="right"><img src="img/titulo_TEST_liderazgo.jpg" width="400" height="39" /></td>
+            <td><img src="img/pixel.gif" width="30" height="10" /></td>
+          </tr>
+        </table>          </td>
+      </tr>
+      <tr>
+        <td><img src="img/pixel.gif" width="10" height="10" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td><table width="90%" border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_11px_blanco">
+          <form class="ldRForm" action="<?=$PHP_SELF?>" method="post" id="ldRForm">
+            <tr>
+              <td background="img/fondobajotitulo.gif" class="TITULO"><img src="img/pixel.gif" width="10" height="5" /></td>
+            </tr>
+            <tr>
+              <td bgcolor="#8CAF3A" class="texto_verdana_9px_blanco"><strong>INSTRUCCIONES: SI DESEA ENVIAR ESTOS DATOS A SU CORREO D&Eacute; CLIC EN EL BOT&Oacute;N</strong></td>
+            </tr>
+            <tr>
+              <td background="img/fondobajotitulo.gif" class="TITULO">&nbsp;</td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido"><table border="0" align="center" cellpadding="2" cellspacing="2" class="texto_verdana_12px_grisclaro">
+                  <tr>
+                    <td><img src="img/icon_user_r.png" alt="Nombre del usuario" width="30" height="33"></td>
+                    <td><?=$nombre?></td>
+					<input type="hidden" name="nombre" id="nombre" value="<?=$nombre?>">
+                  </tr>
+                  <tr>
+                    <td><img src="img/icon_mail.png" alt="Correo electr&oacute;nico registrado" width="30" height="32"></td>
+                    <td><?=$reporte['correo']?></td>
+					<input type="hidden" name="correo" id="correo" value="<?=$reporte['correo']?>">
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td><img src="img/icon_test_r.png" alt="Test respondido" width="30" height="39"></td>
+                    <td>Auto evaluaci&oacute;n de liderazgo, fuerzas y debilidades</td>
+                  </tr>
+                  <tr>
+                    <td><img src="img/icon_date_r.png" alt="Fecha de aplicaci&oacute;n" width="30" height="33"></td>
+                    <td><?=$reporte['fecha']?></td>
+					<input type="hidden" name="fecha" id="fecha" value="<?=$reporte['fecha']?>">
+                  </tr>
+
+                  <tr>
+                    <td><img src="img/icon_time_r.png" alt="Tiempo de resoluci&oacute;n" width="30" height="30"></td>
+                    <td><?=$reporte['minutos']?>minutos</td>
+					<input type="hidden" name="minutos" id="minutos" value="<?=$reporte['minutos']?>">
+                  </tr>
+              </table></td>
+            </tr>
+            <tr valign="top">
+              <td class="textocontenido"><p align="center">
+              	  <input type="hidden" name="enviar" value="TRUE">
+                  <input name="Submit" type="image" class="textocontenido2" value="Enviar mis datos y respuestas de este cuestionario" src="img/boton_enviaramail.png">
+              </p></td>
+            </tr>
+          </form>
+        </table></td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="texto_verdana_10px_gris" align="center"><?php include "PIE.html";?></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="img/pixel.gif" width="1" height="2"></td>
+  </tr>
+</table>
+</body>
+</html>
